@@ -1,0 +1,39 @@
+# Environment variables (never commit real secrets)
+.env
+.env.local
+.env.*.local
+src/backend/.env
+src/frontend/.env.local
+src/trend-collector/.env
+
+# Node
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# IDE
+.DS_Store
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+
+# TypeScript build
+*.tsbuildinfo
+
+# Misc
+*.local

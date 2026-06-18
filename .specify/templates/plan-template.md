@@ -40,7 +40,45 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+### Principle I: Code Quality
+- [ ] TypeScript strict mode enabled
+- [ ] Clean architecture principles will be followed
+- [ ] Public APIs will be documented
+- [ ] No duplicated business logic in design
+- [ ] Linting and type checking configured
+
+### Principle II: Testing Standards (NON-NEGOTIABLE)
+- [ ] Unit tests planned for all business logic
+- [ ] Integration tests planned for critical workflows
+- [ ] Test coverage target: 80% minimum
+- [ ] Regression tests included for bug fixes
+- [ ] Tests required before merge
+
+### Principle III: User Experience Consistency
+- [ ] Consistent UI components identified
+- [ ] Terminology standardized (trends, signals, keywords, insights)
+- [ ] Loading and error states handled
+- [ ] Mobile-responsive design planned
+- [ ] Dashboard remains intuitive for non-technical users
+
+### Principle IV: Performance
+- [ ] Dashboard load time target: < 2 seconds
+- [ ] API response time target: < 500ms for standard requests
+- [ ] Background jobs designed as asynchronous
+- [ ] Trend collection will not block user requests
+- [ ] Caching strategy defined
+
+### Principle V: Scalability
+- [ ] Signal providers designed as pluggable
+- [ ] New data sources can be added without modifying existing providers
+- [ ] AI providers designed as replaceable
+- [ ] Notification channels designed as extensible
+
+### Principle VI: Security
+- [ ] Authentication required for protected endpoints
+- [ ] Credentials will be stored in environment variables
+- [ ] Rate limiting planned for public APIs
+- [ ] Input validation planned for all endpoints
 
 ## Project Structure
 

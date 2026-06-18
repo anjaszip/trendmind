@@ -1,0 +1,168 @@
+# TrendMind CI/CD Pipeline
+# Runs linting, type checking, and tests on all services
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Backend (NestJS) - Linting, Type Checking, Tests
+  backend:
+    name: Backend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/backend
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ./src/backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript type checking
+        run: npx tsc --noEmit
+
+      - name: Run unit tests
+        run: npm run test:cov
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./src/backend/coverage/lcov.info
+          flags: backend
+          name: backend-coverage
+
+  # Trend Collector (Python) - Linting, Type Checking, Tests
+  trend-collector:
+    name: Trend Collector CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/trend-collector
+
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Black (code formatting check)
+        run: black --check src/ tests/
+
+      - name: Run isort (import sorting check)
+        run: isort --check-only src/ tests/
+
+      - name: Run Flake8 (linting)
+        run: flake8 src/ tests/ --max-line-length=88 --extend-ignore=E203,W503
+
+      - name: Run mypy (type checking)
+        run: mypy src/
+
+      - name: Run pytest with coverage
+        run: pytest --cov=src --cov-report=xml --cov-report=term
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./src/trend-collector/coverage.xml
+          flags: trend-collector
+          name: trend-collector-coverage
+
+  # Frontend (Next.js) - Linting, Type Checking, Build
+  frontend:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/frontend
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ./src/frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript type checking
+        run: npx tsc --noEmit
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3000
+
+  # Constitution Compliance Check
+  compliance:
+    name: Constitution Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify constitution exists
+        run: test -f .specify/memory/constitution.md
+
+      - name: Check for TypeScript strict mode in backend
+        run: grep -q '"strict": true' src/backend/tsconfig.json
+
+      - name: Check for 80% coverage threshold in backend
+        run: grep -q '"coverageThreshold"' src/backend/package.json
+
+      - name: Check for 80% coverage threshold in trend-collector
+        run: grep -q 'cov-fail-under=80' src/trend-collector/pyproject.toml
+
+      - name: Verify .env.example files exist
+        run: |
+          test -f .env.example
+          test -f src/backend/.env.example
+          test -f src/trend-collector/.env.example

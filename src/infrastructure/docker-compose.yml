@@ -1,0 +1,116 @@
+# TrendMind Development Infrastructure
+# Docker Compose configuration for local development
+
+version: '3.8'
+
+services:
+  # PostgreSQL 15 with TimescaleDB - Main Database
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    container_name: trendmind-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: trendmind
+      POSTGRES_USER: trendmind_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password_change_in_production}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trendmind_user -d trendmind"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 7 - Caching and Job Queue
+  redis:
+    image: redis:7-alpine
+    container_name: trendmind-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-dev_redis_password}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NestJS Backend API
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../../src/infrastructure/Dockerfile.backend
+    container_name: trendmind-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://trendmind_user:${POSTGRES_PASSWORD:-dev_password_change_in_production}@postgres:5432/trendmind
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-dev_redis_password}
+      JWT_SECRET: ${JWT_SECRET:-dev_jwt_secret_change_in_production}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      TREND_COLLECTOR_URL: http://trend-collector:8000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../backend/src:/app/src
+      - ../backend/test:/app/test
+    command: npm run start:dev
+
+  # Python Trend Collector Microservice
+  trend-collector:
+    build:
+      context: ../trend-collector
+      dockerfile: ../../src/infrastructure/Dockerfile.collector
+    container_name: trendmind-collector
+    restart: unless-stopped
+    environment:
+      PYTHONUNBUFFERED: 1
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../trend-collector/src:/app/src
+      - ../trend-collector/tests:/app/tests
+    command: uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../../src/infrastructure/Dockerfile.frontend
+    container_name: trendmind-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    ports:
+      - "3001:3000"
+    volumes:
+      - ../frontend/src:/app/src
+      - ../frontend/public:/app/public
+    command: npm run dev
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  default:
+    name: trendmind-network

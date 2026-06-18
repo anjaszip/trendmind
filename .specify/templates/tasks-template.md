@@ -50,8 +50,12 @@ description: "Task list template for feature implementation"
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T002 Initialize TypeScript project with strict mode enabled (Principle I)
+- [ ] T003 [P] Configure ESLint and Prettier for TypeScript (Principle I)
+- [ ] T004 [P] Setup testing framework (Jest/Vitest) with 80% coverage target (Principle II)
+- [ ] T005 [P] Configure CI/CD pipeline with linting, type checking, and tests (Principles I & II)
+- [ ] T006 [P] Setup performance monitoring for dashboard and API (Principle IV)
+- [ ] T007 [P] Configure security: authentication, rate limiting, input validation (Principle VI)
 
 ---
 
@@ -63,12 +67,18 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T008 Setup database schema and migrations framework
+- [ ] T009 [P] Implement authentication/authorization framework (Principle VI)
+- [ ] T010 [P] Setup API routing and middleware with rate limiting (Principle VI)
+- [ ] T011 [P] Implement pluggable signal provider architecture (Principle V)
+- [ ] T012 [P] Implement pluggable AI provider architecture (Principle V)
+- [ ] T013 [P] Implement extensible notification channel architecture (Principle V)
+- [ ] T014 Create base models/entities following clean architecture (Principle I)
+- [ ] T015 Configure error handling with user-friendly messages (Principle III)
+- [ ] T016 Setup environment configuration for secrets (Principle VI)
+- [ ] T017 [P] Implement consistent UI components library (Principle III)
+- [ ] T018 [P] Setup caching infrastructure (Principle IV)
+- [ ] T019 [P] Implement async background job queue (Principle IV)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -80,23 +90,38 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 1 (MANDATORY per Principle II) ⚠️
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **Coverage target: 80% minimum**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T020 [P] [US1] Unit tests for business logic in tests/unit/[name].test.ts
+- [ ] T021 [P] [US1] Integration test for [critical workflow] in tests/integration/[name].test.ts
+- [ ] T022 [P] [US1] Regression tests (if bug fix) in tests/regression/[name].test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T023 [P] [US1] Create [Entity] models following clean architecture in src/models/[entity].ts
+- [ ] T024 [US1] Implement [Service] with caching in src/services/[service].ts (Principle IV)
+- [ ] T025 [US1] Implement async background jobs (if needed) in src/jobs/[job].ts (Principle IV)
+- [ ] T026 [US1] Implement API endpoints with auth and validation in src/api/[endpoint].ts (Principle VI)
+- [ ] T027 [US1] Add user-friendly error handling for all states (Principle III)
+- [ ] T028 [P] [US1] Implement UI components using consistent design (if UI) (Principle III)
+- [ ] T029 [P] [US1] Ensure mobile-responsive layout (if UI) (Principle III)
+- [ ] T030 [US1] Use consistent terminology (trends/signals/keywords/insights) (Principle III)
+- [ ] T031 [US1] Document public APIs with usage examples (Principle I)
+- [ ] T032 [US1] Avoid business logic duplication (Principle I)
 
-**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
+### Quality Verification for User Story 1
+
+- [ ] T033 [US1] Verify TypeScript strict mode compliance (Principle I)
+- [ ] T034 [US1] Run ESLint and type checking - must pass (Principle I)
+- [ ] T035 [US1] Verify test coverage ≥ 80% (Principle II)
+- [ ] T036 [US1] Run performance benchmarks (dashboard < 2s, API < 500ms) (Principle IV)
+- [ ] T037 [US1] Verify authentication and input validation (Principle VI)
+- [ ] T038 [US1] Code review with constitutional compliance check
+
+**Checkpoint**: At this point, User Story 1 should be fully functional, tested, and constitution-compliant
 
 ---
 
