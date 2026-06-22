@@ -1,8 +1,6 @@
 # TrendMind Development Infrastructure
 # Docker Compose configuration for local development
 
-version: '3.8'
-
 services:
   # PostgreSQL 15 with TimescaleDB - Main Database
   postgres:
@@ -55,16 +53,24 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: development
-      PORT: 3000
-      DATABASE_URL: postgresql://trendmind_user:${POSTGRES_PASSWORD:-dev_password_change_in_production}@postgres:5432/trendmind
+      PORT: 3001
+      FRONTEND_URL: http://localhost:3001
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: trendmind_user
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-dev_password_change_in_production}
+      DB_NAME: trendmind
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-dev_redis_password}
+      REDIS_CACHE_DB: 0
+      REDIS_BULLMQ_DB: 1
       JWT_SECRET: ${JWT_SECRET:-dev_jwt_secret_change_in_production}
+      JWT_EXPIRY: 7d
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       TREND_COLLECTOR_URL: http://trend-collector:8000
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - ../backend/src:/app/src
       - ../backend/test:/app/test
@@ -97,9 +103,9 @@ services:
     depends_on:
       - backend
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3001
     ports:
-      - "3001:3000"
+      - "3000:3000"
     volumes:
       - ../frontend/src:/app/src
       - ../frontend/public:/app/public
