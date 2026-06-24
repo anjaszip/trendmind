@@ -2,6 +2,11 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class DailyAccelerationAggregate20260604000001 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // Make trend_data_points a TimescaleDB hypertable before creating continuous aggregate
+    await queryRunner.query(`
+      SELECT create_hypertable('trend_data_points', 'timestamp', if_not_exists => TRUE)
+    `);
+
     await queryRunner.query(`
       CREATE MATERIALIZED VIEW IF NOT EXISTS daily_acceleration_metrics
       WITH (timescaledb.continuous) AS

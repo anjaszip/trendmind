@@ -1,0 +1,147 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.keyword {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  white-space: nowrap;
+}
+
+.scoreLabel {
+  font-size: 0.65rem;
+  color: #6b7280;
+  text-align: right;
+  display: block;
+  margin-top: -2px;
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.stageBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stageSeed      { background: #f3f4f6; color: #6b7280; }
+.stageEmerging  { background: #dcfce7; color: #15803d; }
+.stageGrowing   { background: #dbeafe; color: #1d4ed8; }
+.stageViral     { background: #f3e8ff; color: #7e22ce; }
+.stageSaturated { background: #ffedd5; color: #c2410c; }
+.stageDeclining { background: #fee2e2; color: #b91c1c; }
+
+.confidenceBadge {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: #f9fafb;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.timingBadge {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-weight: 600;
+}
+
+.timingEarly   { background: #dcfce7; color: #15803d; }
+.timingOnTime  { background: #dbeafe; color: #1d4ed8; }
+.timingLate    { background: #ffedd5; color: #c2410c; }
+.timingAvoid   { background: #fee2e2; color: #b91c1c; }
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.metric {
+  text-align: center;
+}
+
+.metricValue {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.metricLabel {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.insight {
+  font-size: 0.8rem;
+  color: #4b5563;
+  line-height: 1.5;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 10px;
+  margin-top: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rapidAlert {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: #c2410c;
+  background: #ffedd5;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.scoreChange {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.scoreChangeUp   { color: #15803d; }
+.scoreChangeDown { color: #b91c1c; }

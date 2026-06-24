@@ -127,61 +127,61 @@
 
 ### Tests for User Story 1 (Write FIRST, ensure they FAIL before implementation)
 
-- [ ] T064 [P] [US1] Unit tests for lifecycle classification logic in src/backend/test/unit/lifecycle/stage-classifier.test.ts (test classification rules: seed, emerging, growing, viral, saturated, declining)
-- [ ] T065 [P] [US1] Unit tests for prediction score calculation in src/backend/test/unit/prediction/scoring.service.test.ts (test weighted formula, percentile normalization, 0-100 range)
-- [ ] T066 [P] [US1] Unit tests for acceleration metrics calculation in src/backend/test/unit/acceleration/metrics-calculator.test.ts (test multi-window rate of change: 7d, 14d, 30d)
-- [ ] T067 [P] [US1] Integration test for dashboard endpoint in src/backend/test/integration/dashboard.test.ts (test GET /dashboard/emerging-opportunities with filters, sorting, response structure)
+- [X] T064 [P] [US1] Unit tests for lifecycle classification logic in src/backend/src/lifecycle/stage-classifier.spec.ts (test classification rules: seed, emerging, growing, viral, saturated, declining)
+- [X] T065 [P] [US1] Unit tests for prediction score calculation in src/backend/src/prediction/scoring.service.spec.ts (test weighted formula, percentile normalization, 0-100 range)
+- [X] T066 [P] [US1] Unit tests for acceleration metrics calculation in src/backend/src/acceleration/metrics-calculator.spec.ts (test multi-window rate of change: 7d, 14d, 30d)
+- [X] T067 [P] [US1] Integration test for dashboard endpoint in src/backend/src/dashboard/dashboard.controller.spec.ts (test GET /dashboard/emerging-opportunities with filters, sorting, response structure)
 - [ ] T068 [P] [US1] E2E test for dashboard page in src/frontend/tests/e2e/dashboard.test.tsx (test page load, opportunity cards rendered, loading states, error handling)
 
 ### Backend Implementation - Lifecycle Classification
 
-- [ ] T069 [US1] Implement stage classifier logic in src/backend/src/lifecycle/stage-classifier.ts with classifyLifecycleStage(metrics) using thresholds from config
-- [ ] T070 [P] [US1] Implement lifecycle service in src/backend/src/lifecycle/lifecycle.service.ts with classifyKeyword(), detectStageTransition() methods
-- [ ] T071 [P] [US1] Implement stage transition service in src/backend/src/lifecycle/stage-transition.service.ts with logTransition(), detectRapidTransition() methods
+- [X] T069 [US1] Implement stage classifier logic in src/backend/src/lifecycle/stage-classifier.ts with classifyLifecycleStage(metrics) using thresholds from config
+- [X] T070 [P] [US1] Implement lifecycle service in src/backend/src/lifecycle/lifecycle.service.ts with classifyKeyword(), detectStageTransition() methods
+- [X] T071 [P] [US1] Implement stage transition service in src/backend/src/lifecycle/stage-transition.service.ts with logTransition(), detectRapidTransition() methods
 
 ### Backend Implementation - Acceleration Metrics
 
-- [ ] T072 [US1] Implement metrics calculator in src/backend/src/acceleration/metrics-calculator.ts with calculateSearchAcceleration(), calculateVideoVelocity(), calculateCreatorAdoptionRate(), calculateViewVelocity()
-- [ ] T073 [P] [US1] Implement acceleration service in src/backend/src/acceleration/acceleration.service.ts with calculateMetrics(keyword), getAccelerationHistory()
+- [X] T072 [US1] Implement metrics calculator in src/backend/src/acceleration/metrics-calculator.ts with calculateSearchAcceleration(), calculateVideoVelocity(), calculateCreatorAdoptionRate(), calculateViewVelocity()
+- [X] T073 [P] [US1] Implement acceleration service in src/backend/src/acceleration/acceleration.service.ts with calculateMetrics(keyword), getAccelerationHistory()
 
 ### Backend Implementation - Prediction Scoring
 
-- [ ] T074 [US1] Implement percentile service in src/backend/src/prediction/percentile.service.ts with calculatePercentileRank() for normalization across all keywords
-- [ ] T075 [P] [US1] Implement scoring service in src/backend/src/prediction/scoring.service.ts with calculatePredictionScore(metrics, weights), applyWeights(), normalizeToScale()
-- [ ] T076 [P] [US1] Implement prediction service in src/backend/src/prediction/prediction.service.ts with scorePrediction(keyword), getPredictionHistory()
+- [X] T074 [US1] Implement percentile service in src/backend/src/prediction/percentile.service.ts with calculatePercentileRank() for normalization across all keywords
+- [X] T075 [P] [US1] Implement scoring service in src/backend/src/prediction/scoring.service.ts with calculatePredictionScore(metrics, weights), applyWeights(), normalizeToScale()
+- [X] T076 [P] [US1] Implement prediction service in src/backend/src/prediction/prediction.service.ts with scorePrediction(keyword), getPredictionHistory()
 
 ### Backend Implementation - AI Insights
 
-- [ ] T077 [US1] Implement seasonality detector in src/backend/src/insights/seasonality-detector.ts with detectSeasonalPattern() using year-over-year comparison
-- [ ] T078 [P] [US1] Implement insight generator in src/backend/src/insights/insight-generator.ts with generateLifecycleInsight(keyword, context) calling AI provider
-- [ ] T079 [P] [US1] Implement insights service in src/backend/src/insights/insights.service.ts with generateInsight(), refreshInsight(), cacheInsight()
+- [X] T077 [US1] Implement seasonality detector in src/backend/src/insights/seasonality-detector.ts with detectSeasonalPattern() using year-over-year comparison
+- [X] T078 [P] [US1] Implement insight generator in src/backend/src/insights/insight-generator.ts with generateLifecycleInsight(keyword, context) calling AI provider
+- [X] T079 [P] [US1] Implement insights service in src/backend/src/insights/insights.service.ts with generateInsight(), refreshInsight(), cacheInsight()
 
 ### Backend Implementation - Dashboard Endpoints
 
-- [ ] T080 [US1] Implement emerging opportunities service in src/backend/src/dashboard/emerging-opportunities.service.ts with getEmergingOpportunities(filters) - filter by stages, minScore, confidenceLevel, sort by predictionScore
-- [ ] T081 [P] [US1] Implement analytics service in src/backend/src/dashboard/analytics.service.ts with getStageDistribution(), getRapidTransitions()
-- [ ] T082 [P] [US1] Implement dashboard controller in src/backend/src/dashboard/dashboard.controller.ts with GET /dashboard/emerging-opportunities, GET /analytics/stage-distribution, GET /analytics/rapid-transitions
+- [X] T080 [US1] Implement emerging opportunities service in src/backend/src/dashboard/emerging-opportunities.service.ts with getEmergingOpportunities(filters) - filter by stages, minScore, confidenceLevel, sort by predictionScore
+- [X] T081 [P] [US1] Implement analytics service in src/backend/src/dashboard/analytics.service.ts with getStageDistribution(), getRapidTransitions()
+- [X] T082 [P] [US1] Implement dashboard controller in src/backend/src/dashboard/dashboard.controller.ts with GET /dashboard/emerging-opportunities, GET /analytics/stage-distribution, GET /analytics/rapid-transitions
 
 ### Background Jobs - Calculation Pipeline
 
-- [ ] T083 [US1] Implement trend collection processor in src/backend/src/jobs/trend-collection.processor.ts - orchestrate signal collection from Google Trends + YouTube, store TrendDataPoint
-- [ ] T084 [P] [US1] Implement acceleration calculation processor in src/backend/src/jobs/acceleration-calculation.processor.ts - calculate metrics from historical TrendDataPoint records
-- [ ] T085 [P] [US1] Implement prediction scoring processor in src/backend/src/jobs/prediction-scoring.processor.ts - calculate prediction score from AccelerationMetrics
-- [ ] T086 [P] [US1] Implement lifecycle classification processor in src/backend/src/jobs/lifecycle-classification.processor.ts - classify stage, detect transitions
-- [ ] T087 [P] [US1] Implement insight generation processor in src/backend/src/jobs/insight-generation.processor.ts - generate AI insights with timing recommendations
+- [X] T083 [US1] Implement trend collection processor in src/backend/src/jobs/trend-collection.processor.ts - orchestrate signal collection from Google Trends + YouTube, store TrendDataPoint
+- [X] T084 [P] [US1] Implement acceleration calculation processor in src/backend/src/jobs/acceleration-calculation.processor.ts - calculate metrics from historical TrendDataPoint records
+- [X] T085 [P] [US1] Implement prediction scoring processor in src/backend/src/jobs/prediction-scoring.processor.ts - calculate prediction score from AccelerationMetrics
+- [X] T086 [P] [US1] Implement lifecycle classification processor in src/backend/src/jobs/lifecycle-classification.processor.ts - classify stage, detect transitions
+- [X] T087 [P] [US1] Implement insight generation processor in src/backend/src/jobs/insight-generation.processor.ts - generate AI insights with timing recommendations
 
 ### Frontend Implementation - Dashboard
 
-- [ ] T088 [US1] Create OpportunityCard component in src/frontend/src/components/dashboard/OpportunityCard.tsx displaying keyword, predictionScore, lifecycleStage badge, accelerationMetrics preview, insight snippet (Principle III)
-- [ ] T089 [P] [US1] Create TrendChart component in src/frontend/src/components/dashboard/TrendChart.tsx for visualizing 30-day acceleration history with Recharts (Principle III)
-- [ ] T090 [P] [US1] Create dashboard page in src/frontend/src/app/page.tsx with emerging opportunities list, filters (stages, minScore, confidenceLevel), loading/error states (Principles III & IV)
-- [ ] T091 [P] [US1] Implement dashboard hooks in src/frontend/src/hooks/useDashboard.ts with useEmergingOpportunities(), useStageDistribution()
-- [ ] T092 [P] [US1] Style OpportunityCard with lifecycle stage color coding in src/frontend/src/components/dashboard/OpportunityCard.module.css (seed: gray, emerging: green, growing: blue, viral: purple, saturated: orange, declining: red) (Principle III)
+- [X] T088 [US1] Create OpportunityCard component in src/frontend/src/components/dashboard/OpportunityCard.tsx displaying keyword, predictionScore, lifecycleStage badge, accelerationMetrics preview, insight snippet (Principle III)
+- [X] T089 [P] [US1] Create TrendChart component in src/frontend/src/components/dashboard/TrendChart.tsx for visualizing 30-day acceleration history with SVG (Principle III)
+- [X] T090 [P] [US1] Create dashboard page in src/frontend/src/app/page.tsx with emerging opportunities list, filters (stages, minScore, confidenceLevel), loading/error states (Principles III & IV)
+- [X] T091 [P] [US1] Implement dashboard hooks in src/frontend/src/hooks/useDashboard.ts with useEmergingOpportunities(), useStageDistribution()
+- [X] T092 [P] [US1] Style OpportunityCard with lifecycle stage color coding in src/frontend/src/components/dashboard/OpportunityCard.module.css (seed: gray, emerging: green, growing: blue, viral: purple, saturated: orange, declining: red) (Principle III)
 
 ### Seed Keywords Setup
 
-- [ ] T093 [US1] Create seed keywords migration in src/backend/src/database/migrations/YYYYMMDDHHMMSS-SeedKeywords.ts with ~20 curated product categories (e.g., wireless earbuds, standing desk, portable blender)
-- [ ] T094 [P] [US1] Configure staggered trend collection schedule in src/backend/src/jobs/schedulers/seed-keywords.scheduler.ts - distribute 20 seed keywords evenly over 1-hour interval to prevent API rate limit spikes
+- [X] T093 [US1] Create seed keywords migration in src/backend/src/database/migrations/20260604000002-SeedKeywords.ts with 20 curated product categories (e.g., wireless earbuds, standing desk, portable blender)
+- [X] T094 [P] [US1] Configure staggered trend collection schedule in src/backend/src/jobs/schedulers/seed-keywords.scheduler.ts - distribute 20 seed keywords evenly over 1-hour interval to prevent API rate limit spikes
 
 ---
 
@@ -193,32 +193,32 @@
 
 ### Tests for User Story 2 (Write FIRST, ensure they FAIL before implementation)
 
-- [ ] T095 [P] [US2] Unit tests for keyword normalization in src/backend/test/unit/keywords/keywords.service.test.ts (test lowercase, trim, remove punctuation, singular form, duplicate detection)
-- [ ] T096 [P] [US2] Unit tests for keyword validation in src/backend/test/unit/keywords/validation.test.ts (test length limits, special characters, XSS attempts, SQL injection)
-- [ ] T097 [P] [US2] Integration test for keyword CRUD in src/backend/test/integration/keywords.test.ts (test POST /keywords, GET /keywords, DELETE /keywords/:id with auth, duplicates, user isolation)
+- [X] T095 [P] [US2] Unit tests for keyword normalization in src/backend/src/keywords/keywords.service.spec.ts (test lowercase, trim, remove punctuation, XSS, duplicate detection)
+- [X] T096 [P] [US2] Unit tests for keyword validation in src/backend/src/keywords/keywords.service.spec.ts (test length limits, special characters, XSS attempts, SQL injection)
+- [X] T097 [P] [US2] Integration test for keyword CRUD in src/backend/src/keywords/keywords.controller.spec.ts (test POST /keywords, GET /keywords, DELETE /keywords/:id with auth, duplicates, user isolation)
 - [ ] T098 [P] [US2] E2E test for add keyword flow in src/frontend/tests/e2e/add-keyword.test.tsx (test form submission, validation, success toast, keyword appears in list)
 
 ### Backend Implementation - Keyword Management
 
-- [ ] T099 [US2] Implement keywords service in src/backend/src/keywords/keywords.service.ts with addKeyword(), removeKeyword(), listKeywords(), normalizeKeyword(), validateKeyword() methods
-- [ ] T100 [P] [US2] Implement keywords controller in src/backend/src/keywords/keywords.controller.ts with POST /keywords, GET /keywords, DELETE /keywords/:id, GET /keywords/:id
-- [ ] T101 [P] [US2] Create AddKeywordDto in src/backend/src/keywords/dto/add-keyword.dto.ts with validation decorators (class-validator: IsNotEmpty, Length(1,100), IsString) (Principle VI)
-- [ ] T102 [P] [US2] Create KeywordResponseDto in src/backend/src/keywords/dto/keyword-response.dto.ts with serialization for API responses
-- [ ] T103 [P] [US2] Implement duplicate detection in keywords service using normalized_form uniqueness constraint and return 409 Conflict error
+- [X] T099 [US2] Implement keywords service in src/backend/src/keywords/keywords.service.ts with addKeyword(), removeKeyword(), listKeywords(), normalizeKeyword(), validateKeyword() methods
+- [X] T100 [P] [US2] Implement keywords controller in src/backend/src/keywords/keywords.controller.ts with POST /keywords, GET /keywords, DELETE /keywords/:id, GET /keywords/:id
+- [X] T101 [P] [US2] Create AddKeywordDto in src/backend/src/keywords/dto/add-keyword.dto.ts with validation decorators (class-validator: IsNotEmpty, Length(1,100), IsString) (Principle VI)
+- [X] T102 [P] [US2] Create KeywordResponseDto in src/backend/src/keywords/dto/keyword-response.dto.ts with serialization for API responses
+- [X] T103 [P] [US2] Implement duplicate detection in keywords service using normalized_form uniqueness constraint and return 409 Conflict error
 
 ### Frontend Implementation - Keyword Management
 
-- [ ] T104 [US2] Create AddKeywordForm component in src/frontend/src/components/keywords/AddKeywordForm.tsx with input field, validation, submit handler (Principle III)
-- [ ] T105 [P] [US2] Create KeywordList component in src/frontend/src/components/keywords/KeywordList.tsx displaying user's monitored keywords with remove button (Principle III)
-- [ ] T106 [P] [US2] Create KeywordItem component in src/frontend/src/components/keywords/KeywordItem.tsx with keyword details, lifecycle stage badge, prediction score, remove button (Principle III)
-- [ ] T107 [P] [US2] Implement keyword hooks in src/frontend/src/hooks/useKeywords.ts with useAddKeyword(), useRemoveKeyword(), useKeywordList()
-- [ ] T108 [P] [US2] Add keyword management section to dashboard page in src/frontend/src/app/page.tsx with AddKeywordForm and KeywordList components
+- [X] T104 [US2] Create AddKeywordForm component in src/frontend/src/components/keywords/AddKeywordForm.tsx with input field, validation, submit handler (Principle III)
+- [X] T105 [P] [US2] Create KeywordList component in src/frontend/src/components/keywords/KeywordList.tsx displaying user's monitored keywords with remove button (Principle III)
+- [X] T106 [P] [US2] Create KeywordItem component in src/frontend/src/components/keywords/KeywordItem.tsx with keyword details, lifecycle stage badge, prediction score, remove button (Principle III)
+- [X] T107 [P] [US2] Implement keyword hooks in src/frontend/src/hooks/useKeywords.ts with useAddKeyword(), useRemoveKeyword(), useKeywordList()
+- [X] T108 [P] [US2] Add keyword management section to dashboard page in src/frontend/src/app/page.tsx with AddKeywordForm and KeywordList components
 
 ### Monitoring Status & Error Handling
 
-- [ ] T109 [US2] Implement monitoring status updates in keywords service - set to 'active' on add, 'failed' on collection error, 'paused' on user request
-- [ ] T110 [P] [US2] Create monitoring status badge component in src/frontend/src/components/keywords/StatusBadge.tsx with color coding (active: green, paused: yellow, failed: red) (Principle III)
-- [ ] T111 [P] [US2] Implement error recovery logic in trend collection processor - retry failed keywords with exponential backoff, mark as 'failed' after 3 attempts
+- [X] T109 [US2] Implement monitoring status updates in keywords service - set to 'active' on add, 'failed' on collection error, 'paused' on user request
+- [X] T110 [P] [US2] Create monitoring status badge component in src/frontend/src/components/keywords/StatusBadge.tsx with color coding (active: green, paused: yellow, failed: red) (Principle III)
+- [X] T111 [P] [US2] Implement error recovery logic in trend collection processor - retry failed keywords with exponential backoff, mark as 'failed' after 3 attempts
 
 ---
 

@@ -1,4 +1,5 @@
 export interface LifecycleInsightContext {
+  keywordId: string;
   keyword: string;
   lifecycleStage: string;
   predictionScore: number;

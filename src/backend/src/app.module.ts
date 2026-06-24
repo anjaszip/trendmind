@@ -6,6 +6,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CacheModule } from './common/cache/cache.module';
+import { LifecycleModule } from './lifecycle/lifecycle.module';
+import { AccelerationModule } from './acceleration/acceleration.module';
+import { PredictionModule } from './prediction/prediction.module';
+import { InsightsModule } from './insights/insights.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { JobsModule } from './jobs/jobs.module';
+import { KeywordsModule } from './keywords/keywords.module';
 import { RateLimitMiddleware } from './common/middleware/rate-limit.middleware';
 import { QUEUE_NAMES, getBullMQConnection } from './common/config/bullmq.config';
 
@@ -18,21 +25,20 @@ import { PredictionScore } from './prediction/entities/prediction-score.entity';
 import { AIInsight } from './insights/entities/ai-insight.entity';
 import { StageTransitionEvent } from './lifecycle/entities/stage-transition-event.entity';
 
-// Providers
-import { TimescaleSetupService } from './database/timescale-setup.service';
-import { GoogleTrendsProvider } from './providers/signal-providers/google-trends.provider';
-import { YouTubeProvider } from './providers/signal-providers/youtube.provider';
-import { OpenAIProvider } from './providers/ai-providers/openai.provider';
-import { SignalAggregationService } from './providers/signal-providers/signal-aggregation.service';
-
-// Job queues
+// Seed keywords scheduler
+import { SeedKeywordsScheduler } from './jobs/schedulers/seed-keywords.scheduler';
 import { TrendCollectionQueue } from './jobs/queues/trend-collection.queue';
-import { AccelerationCalculationQueue } from './jobs/queues/acceleration-calculation.queue';
-import { PredictionScoringQueue } from './jobs/queues/prediction-scoring.queue';
-import { LifecycleClassificationQueue } from './jobs/queues/lifecycle-classification.queue';
-import { InsightGenerationQueue } from './jobs/queues/insight-generation.queue';
+import { TimescaleSetupService } from './database/timescale-setup.service';
 
-const ALL_ENTITIES = [User, Keyword, TrendDataPoint, AccelerationMetrics, PredictionScore, AIInsight, StageTransitionEvent];
+const ALL_ENTITIES = [
+  User,
+  Keyword,
+  TrendDataPoint,
+  AccelerationMetrics,
+  PredictionScore,
+  AIInsight,
+  StageTransitionEvent,
+];
 
 @Module({
   imports: [
@@ -70,28 +76,24 @@ const ALL_ENTITIES = [User, Keyword, TrendDataPoint, AccelerationMetrics, Predic
       { name: QUEUE_NAMES.INSIGHT_GENERATION },
     ),
 
+    TypeOrmModule.forFeature([Keyword]),
+
     AuthModule,
     CacheModule,
+    AccelerationModule,
+    PredictionModule,
+    LifecycleModule,
+    InsightsModule,
+    DashboardModule,
+    JobsModule,
+    KeywordsModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     TimescaleSetupService,
-    GoogleTrendsProvider,
-    YouTubeProvider,
-    OpenAIProvider,
-    SignalAggregationService,
     TrendCollectionQueue,
-    AccelerationCalculationQueue,
-    PredictionScoringQueue,
-    LifecycleClassificationQueue,
-    InsightGenerationQueue,
-  ],
-  exports: [
-    GoogleTrendsProvider,
-    YouTubeProvider,
-    OpenAIProvider,
-    SignalAggregationService,
+    SeedKeywordsScheduler,
   ],
 })
 export class AppModule implements NestModule {
