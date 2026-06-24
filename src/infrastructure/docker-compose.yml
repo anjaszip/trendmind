@@ -54,7 +54,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3001
-      FRONTEND_URL: http://localhost:3001
+      FRONTEND_URL: http://localhost:3000
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USERNAME: trendmind_user
@@ -68,7 +68,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-dev_jwt_secret_change_in_production}
       JWT_EXPIRY: 7d
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      TREND_COLLECTOR_URL: http://trend-collector:8000
+      TREND_COLLECTOR_URL: http://172.17.0.1:8000
     ports:
       - "3001:3001"
     volumes:
@@ -92,6 +92,16 @@ services:
       - ../trend-collector/src:/app/src
       - ../trend-collector/tests:/app/tests
     command: uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
+
+  # Adminer - Database Management UI
+  adminer:
+    image: adminer:latest
+    container_name: trendmind-adminer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
 
   # Next.js Frontend
   frontend:

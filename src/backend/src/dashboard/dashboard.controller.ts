@@ -1,9 +1,11 @@
-import { Controller, Get, Query, UseGuards, ParseIntPipe, ParseEnumPipe, DefaultValuePipe, Optional } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { EmergingOpportunitiesService, OpportunityFilters } from './emerging-opportunities.service';
 import { AnalyticsService } from './analytics.service';
 import { LifecycleStage } from '../common/enums/lifecycle-stage.enum';
 import { ConfidenceLevel } from '../common/enums/confidence-level.enum';
+import { YouTubeProvider } from '../providers/signal-providers/youtube.provider';
+import { GoogleTrendsProvider } from '../providers/signal-providers/google-trends.provider';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
@@ -11,6 +13,8 @@ export class DashboardController {
   constructor(
     private readonly opportunitiesService: EmergingOpportunitiesService,
     private readonly analyticsService: AnalyticsService,
+    private readonly youtubeProvider: YouTubeProvider,
+    private readonly googleProvider: GoogleTrendsProvider,
   ) {}
 
   @Get('dashboard/emerging-opportunities')
@@ -44,5 +48,13 @@ export class DashboardController {
     @Query('days', new DefaultValuePipe(7), ParseIntPipe) days = 7,
   ) {
     return this.analyticsService.getRapidTransitions(days);
+  }
+
+  @Get('api/rate-limit-status')
+  getRateLimitStatus() {
+    return {
+      youtube: this.youtubeProvider.getRateLimitStatus(),
+      googleTrends: this.googleProvider.getRateLimitStatus(),
+    };
   }
 }

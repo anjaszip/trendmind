@@ -2,8 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DashboardController } from './dashboard.controller';
 import { EmergingOpportunitiesService } from './emerging-opportunities.service';
 import { AnalyticsService } from './analytics.service';
+import { YouTubeProvider } from '../providers/signal-providers/youtube.provider';
+import { GoogleTrendsProvider } from '../providers/signal-providers/google-trends.provider';
 import { LifecycleStage } from '../common/enums/lifecycle-stage.enum';
 import { ConfidenceLevel } from '../common/enums/confidence-level.enum';
+
+const mockRateLimit = { remaining: 9900, resetAt: new Date(), isLimited: false };
 
 const mockOpportunity = {
   keywordId: 'kw-1',
@@ -41,6 +45,14 @@ describe('DashboardController', () => {
             getStageDistribution: jest.fn().mockResolvedValue([]),
             getRapidTransitions: jest.fn().mockResolvedValue([]),
           },
+        },
+        {
+          provide: YouTubeProvider,
+          useValue: { getRateLimitStatus: jest.fn().mockReturnValue(mockRateLimit) },
+        },
+        {
+          provide: GoogleTrendsProvider,
+          useValue: { getRateLimitStatus: jest.fn().mockReturnValue(mockRateLimit) },
         },
       ],
     }).compile();

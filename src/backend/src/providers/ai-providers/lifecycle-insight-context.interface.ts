@@ -10,6 +10,11 @@ export interface LifecycleInsightContext {
     relatedQueryGrowth: number | null;
   };
   rapidTransition: boolean;
+  rapidTransitionDetails?: {
+    previousStage: string;
+    newStage: string;
+    daysInPreviousStage: number;
+  };
   seasonalPattern: boolean;
   confidenceLevel: string;
   historicalDataDays: number;

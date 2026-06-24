@@ -28,6 +28,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+}
+
+.keyword:hover {
+  color: #2563eb;
+  text-decoration: underline;
 }
 
 .score {
@@ -145,3 +151,12 @@
 
 .scoreChangeUp   { color: #15803d; }
 .scoreChangeDown { color: #b91c1c; }
+
+.insufficientData {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-style: italic;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 10px;
+  margin-top: 4px;
+}

@@ -10,6 +10,7 @@ import { PredictionModule } from '../prediction/prediction.module';
 import { AccelerationModule } from '../acceleration/acceleration.module';
 import { CacheModule } from '../common/cache/cache.module';
 import { OpenAIProvider } from '../providers/ai-providers/openai.provider';
+import { LifecycleModule } from '../lifecycle/lifecycle.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { OpenAIProvider } from '../providers/ai-providers/openai.provider';
     PredictionModule,
     AccelerationModule,
     CacheModule,
+    LifecycleModule,
   ],
   providers: [SeasonalityDetector, InsightGenerator, InsightsService, OpenAIProvider],
   exports: [InsightsService],

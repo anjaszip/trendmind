@@ -37,6 +37,9 @@ describe('KeywordsController', () => {
             addKeyword: jest.fn(),
             listKeywords: jest.fn(),
             getKeyword: jest.fn(),
+            getKeywordDetail: jest.fn(),
+            getAccelerationHistory: jest.fn(),
+            getStageTransitions: jest.fn(),
             removeKeyword: jest.fn(),
           },
         },
@@ -71,32 +74,36 @@ describe('KeywordsController', () => {
   });
 
   describe('GET /keywords', () => {
-    it('returns list of KeywordResponseDtos', async () => {
-      service.listKeywords.mockResolvedValue([makeKeyword(), makeKeyword({ id: 'kw-2', originalTerm: 'standing desk' })]);
+    it('returns paginated list of KeywordResponseDtos', async () => {
+      const kws = [makeKeyword(), makeKeyword({ id: 'kw-2', originalTerm: 'standing desk' })];
+      service.listKeywords.mockResolvedValue({ data: kws.map(KeywordResponseDto.from), total: 2, page: 1, limit: 20 });
 
-      const result = await controller.listKeywords(mockReq);
+      const result = await controller.listKeywords(mockReq, 1, 20);
 
-      expect(result).toHaveLength(2);
-      expect(result[0]).toBeInstanceOf(KeywordResponseDto);
-      expect(service.listKeywords).toHaveBeenCalledWith('user-1');
+      expect(result.data).toHaveLength(2);
+      expect(result.total).toBe(2);
+      expect(result.data[0]).toBeInstanceOf(KeywordResponseDto);
+      expect(service.listKeywords).toHaveBeenCalledWith('user-1', 1, 20);
     });
 
-    it('returns empty array when user has no keywords', async () => {
-      service.listKeywords.mockResolvedValue([]);
-      const result = await controller.listKeywords(mockReq);
-      expect(result).toEqual([]);
+    it('returns empty data when user has no keywords', async () => {
+      service.listKeywords.mockResolvedValue({ data: [], total: 0, page: 1, limit: 20 });
+      const result = await controller.listKeywords(mockReq, 1, 20);
+      expect(result.data).toEqual([]);
+      expect(result.total).toBe(0);
     });
   });
 
   describe('GET /keywords/:id', () => {
-    it('returns a single keyword', async () => {
-      service.getKeyword.mockResolvedValue(makeKeyword());
+    it('returns keyword detail', async () => {
+      service.getKeywordDetail.mockResolvedValue({ id: 'kw-1', term: 'wireless earbuds' } as any);
       const result = await controller.getKeyword(mockReq, 'kw-1');
       expect(result.id).toBe('kw-1');
+      expect(service.getKeywordDetail).toHaveBeenCalledWith('user-1', 'kw-1');
     });
 
     it('throws NotFoundException for unknown keyword', async () => {
-      service.getKeyword.mockRejectedValue(new NotFoundException());
+      service.getKeywordDetail.mockRejectedValue(new NotFoundException());
       await expect(controller.getKeyword(mockReq, 'bad-id')).rejects.toThrow(NotFoundException);
     });
   });

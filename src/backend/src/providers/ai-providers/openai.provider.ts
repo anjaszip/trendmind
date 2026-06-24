@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { IAIProvider, AIInsightResult } from './ai-provider.interface';
 import { LifecycleInsightContext } from './lifecycle-insight-context.interface';
 
-const PROMPT_VERSION = '1.0.0';
+const PROMPT_VERSION = '1.1.0';
 
 @Injectable()
 export class OpenAIProvider implements IAIProvider {
@@ -31,11 +31,13 @@ export class OpenAIProvider implements IAIProvider {
             {
               role: 'system',
               content:
-                'You are a trend analysis assistant. Provide concise, actionable insights about product trends. Respond in 2-3 sentences.',
+                'You are a TikTok/YouTube trend analysis assistant helping content creators decide when to produce content about emerging product trends. ' +
+                'Analyze lifecycle signals and provide a concise, actionable 2-3 sentence insight. ' +
+                'Focus on: (1) what the growth signals mean right now, (2) the timing opportunity for creators, and (3) a specific action recommendation.',
             },
             { role: 'user', content: prompt },
           ],
-          max_tokens: 200,
+          max_tokens: 250,
           temperature: 0.3,
         }),
       });
@@ -69,18 +71,58 @@ export class OpenAIProvider implements IAIProvider {
 
   private buildPrompt(ctx: LifecycleInsightContext): string {
     const accel = ctx.accelerationMetrics;
-    const rapidNote = ctx.rapidTransition ? ' Note: rapid stage transition detected.' : '';
-    const seasonalNote = ctx.seasonalPattern ? ' Seasonal pattern detected.' : '';
-    return (
-      `Product keyword: "${ctx.keyword}"\n` +
-      `Lifecycle stage: ${ctx.lifecycleStage} (prediction score: ${ctx.predictionScore}/100)\n` +
-      `Search acceleration: ${accel.searchAcceleration ?? 'N/A'}%\n` +
-      `Video velocity: ${accel.videoVelocity ?? 'N/A'} new videos/day\n` +
-      `Creator adoption rate: ${accel.creatorAdoptionRate ?? 'N/A'} new creators/day\n` +
-      `Data confidence: ${ctx.confidenceLevel} (${ctx.historicalDataDays} days of history)\n` +
-      `${rapidNote}${seasonalNote}\n\n` +
-      'Explain the lifecycle stage, what the growth signals mean for this product, and the timing recommendation for content creators.'
-    );
+
+    const stageExplanations: Record<string, string> = {
+      seed: 'early discovery phase — very few creators covering it, audience interest just beginning',
+      emerging: 'gaining initial traction with early adopters, search interest climbing noticeably',
+      growing: 'mainstream adoption underway, strong creator and audience growth across the board',
+      viral: 'peak adoption — high competition, saturated feed, audience fatigue setting in',
+      saturated: 'market is crowded, most audiences have seen the content, differentiation is hard',
+      declining: 'interest dropping, audience moving on to newer trends',
+    };
+
+    const timingRationale: Record<string, string> = {
+      seed: 'EARLY — act now to establish authority before the mainstream wave arrives',
+      emerging: 'EARLY — significant upside remains, first-mover advantage still available',
+      growing: 'ON TIME — solid audience exists, competition still manageable, good ROI window',
+      viral: 'LATE — high competition and audience fatigue reduce return on new content',
+      saturated: 'LATE — difficult to stand out, only highly differentiated content will perform',
+      declining: 'AVOID — declining interest means poor long-term content performance',
+    };
+
+    const fmt = (v: number | null, unit = '') => (v != null ? `${v.toFixed(2)}${unit}` : 'N/A');
+
+    const lines: string[] = [
+      `Product keyword: "${ctx.keyword}"`,
+      `Lifecycle stage: ${ctx.lifecycleStage} — ${stageExplanations[ctx.lifecycleStage] ?? 'unknown stage'}`,
+      `Prediction score: ${ctx.predictionScore}/100`,
+      ``,
+      `Growth signals (${ctx.historicalDataDays} days of data, confidence: ${ctx.confidenceLevel.toUpperCase()}):`,
+      `  Search acceleration: ${fmt(accel.searchAcceleration, '%')}`,
+      `  Video velocity: ${fmt(accel.videoVelocity, ' new videos/day')}`,
+      `  Creator adoption: ${fmt(accel.creatorAdoptionRate, ' new creators/day')}`,
+      `  Related query growth: ${fmt(accel.relatedQueryGrowth, '%')}`,
+      ``,
+      `Timing recommendation: ${timingRationale[ctx.lifecycleStage] ?? 'EARLY'}`,
+    ];
+
+    if (ctx.rapidTransition && ctx.rapidTransitionDetails) {
+      const { previousStage, newStage, daysInPreviousStage } = ctx.rapidTransitionDetails;
+      lines.push(
+        ``,
+        `⚠️ RAPID STAGE TRANSITION: "${ctx.keyword}" jumped from ${previousStage} → ${newStage} in only ${daysInPreviousStage} day(s). The opportunity window may be closing faster than normal.`,
+      );
+    } else if (ctx.rapidTransition) {
+      lines.push(``, `⚠️ RAPID STAGE TRANSITION detected — opportunity window may be closing faster than normal.`);
+    }
+
+    if (ctx.seasonalPattern) {
+      lines.push(``, `📅 SEASONAL PATTERN: This keyword shows recurring growth cycles — factor in calendar timing for content planning.`);
+    }
+
+    lines.push(``, `In 2-3 sentences: explain what these signals mean right now and give a specific timing recommendation for content creators.`);
+
+    return lines.join('\n');
   }
 
   private mapTimingRecommendation(stage: string): string {
@@ -100,9 +142,17 @@ export class OpenAIProvider implements IAIProvider {
   }
 
   private fallbackInsight(ctx: LifecycleInsightContext): AIInsightResult {
+    const timing = this.mapTimingRecommendation(ctx.lifecycleStage);
+    const rapidNote = ctx.rapidTransitionDetails
+      ? ` ⚠️ Rapid stage transition detected (${ctx.rapidTransitionDetails.previousStage} → ${ctx.rapidTransitionDetails.newStage} in ${ctx.rapidTransitionDetails.daysInPreviousStage} day(s)) — the opportunity window may be closing faster than normal.`
+      : ctx.rapidTransition
+        ? ' ⚠️ Rapid stage transition detected — the opportunity window may be closing faster than normal.'
+        : '';
+    const seasonalNote = ctx.seasonalPattern ? ' Seasonal patterns suggest recurring growth cycles — factor in calendar timing.' : '';
     return {
-      insightText: `"${ctx.keyword}" is in the ${ctx.lifecycleStage} stage with a prediction score of ${ctx.predictionScore}. Insufficient data to generate a detailed insight at this time.`,
-      timingRecommendation: this.mapTimingRecommendation(ctx.lifecycleStage),
+      insightText:
+        `"${ctx.keyword}" is in the ${ctx.lifecycleStage} stage with a prediction score of ${ctx.predictionScore}/100.${rapidNote}${seasonalNote} Timing recommendation: ${timing.replace('_', ' ')}.`,
+      timingRecommendation: timing,
       seasonalityFlag: ctx.seasonalPattern,
       rapidTransitionFlag: ctx.rapidTransition,
       confidenceScore: 20,

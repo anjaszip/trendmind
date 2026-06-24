@@ -230,38 +230,38 @@
 
 ### Tests for User Story 3 (Write FIRST, ensure they FAIL before implementation)
 
-- [ ] T112 [P] [US3] Unit tests for stage transition detection in src/backend/test/unit/lifecycle/stage-transition.service.test.ts (test normal vs rapid transitions, velocity classification)
-- [ ] T113 [P] [US3] Unit tests for timing recommendation logic in src/backend/test/unit/insights/insight-generator.test.ts (test early/on_time/late/avoid mapping to lifecycle stages)
-- [ ] T114 [P] [US3] Integration test for keyword detail endpoint in src/backend/test/integration/keywords-detail.test.ts (test GET /keywords/:id with full prediction, acceleration, insight, stage history)
-- [ ] T115 [P] [US3] E2E test for keyword detail page in src/frontend/tests/e2e/keyword-detail.test.tsx (test navigation, data display, chart rendering, back button)
+- [X] T112 [P] [US3] Unit tests for stage transition detection in src/backend/test/unit/lifecycle/stage-transition.service.test.ts (test normal vs rapid transitions, velocity classification)
+- [X] T113 [P] [US3] Unit tests for timing recommendation logic in src/backend/test/unit/insights/insight-generator.test.ts (test early/on_time/late/avoid mapping to lifecycle stages)
+- [X] T114 [P] [US3] Integration test for keyword detail endpoint in src/backend/test/integration/keywords-detail.test.ts (test GET /keywords/:id with full prediction, acceleration, insight, stage history)
+- [X] T115 [P] [US3] E2E test for keyword detail page in src/frontend/tests/e2e/keyword-detail.test.tsx (test navigation, data display, chart rendering, back button)
 
 ### Backend Implementation - Detailed Keyword Endpoints
 
-- [ ] T116 [US3] Implement getKeywordDetail() in keywords service returning keyword + prediction + acceleration + insight + stage transition history
-- [ ] T117 [P] [US3] Implement GET /keywords/:id endpoint in keywords controller with detailed response including all related entities
-- [ ] T118 [P] [US3] Implement GET /keywords/:id/acceleration-history?days=30 endpoint returning 30-day time-series acceleration metrics for charting
-- [ ] T119 [P] [US3] Implement GET /keywords/:id/stage-transitions endpoint returning historical stage changes with transition velocity and trigger signals
+- [X] T116 [US3] Implement getKeywordDetail() in keywords service returning keyword + prediction + acceleration + insight + stage transition history
+- [X] T117 [P] [US3] Implement GET /keywords/:id endpoint in keywords controller with detailed response including all related entities
+- [X] T118 [P] [US3] Implement GET /keywords/:id/acceleration-history?days=30 endpoint returning 30-day time-series acceleration metrics for charting
+- [X] T119 [P] [US3] Implement GET /keywords/:id/stage-transitions endpoint returning historical stage changes with transition velocity and trigger signals
 
 ### Frontend Implementation - Keyword Detail Page
 
-- [ ] T120 [US3] Create keyword detail page in src/frontend/src/app/keyword/[id]/page.tsx with keyword info, prediction score, lifecycle stage, acceleration metrics, AI insight, stage history (Principle III)
-- [ ] T121 [P] [US3] Create InsightDetail component in src/frontend/src/components/insights/InsightDetail.tsx displaying full AI insight text, timing recommendation badge, seasonality flag, rapid transition alert (Principle III)
-- [ ] T122 [P] [US3] Create AccelerationChart component in src/frontend/src/components/insights/AccelerationChart.tsx with Recharts line chart for 30-day acceleration history (searchAcceleration, videoVelocity, creatorAdoptionRate) (Principle III)
-- [ ] T123 [P] [US3] Create StageTimeline component in src/frontend/src/components/insights/StageTimeline.tsx visualizing lifecycle progression (seed → emerging → growing → viral) with timestamps and velocity indicators (Principle III)
-- [ ] T124 [P] [US3] Implement keyword detail hooks in src/frontend/src/hooks/useKeywordDetail.ts with useKeyword(), useAccelerationHistory(), useStageTransitions()
-- [ ] T125 [P] [US3] Add navigation from OpportunityCard to keyword detail page using Next.js Link component
+- [X] T120 [US3] Create keyword detail page in src/frontend/src/app/keyword/[id]/page.tsx with keyword info, prediction score, lifecycle stage, acceleration metrics, AI insight, stage history (Principle III)
+- [X] T121 [P] [US3] Create InsightDetail component in src/frontend/src/components/insights/InsightDetail.tsx displaying full AI insight text, timing recommendation badge, seasonality flag, rapid transition alert (Principle III)
+- [X] T122 [P] [US3] Create AccelerationChart component in src/frontend/src/components/insights/AccelerationChart.tsx with Recharts line chart for 30-day acceleration history (searchAcceleration, videoVelocity, creatorAdoptionRate) (Principle III)
+- [X] T123 [P] [US3] Create StageTimeline component in src/frontend/src/components/insights/StageTimeline.tsx visualizing lifecycle progression (seed → emerging → growing → viral) with timestamps and velocity indicators (Principle III)
+- [X] T124 [P] [US3] Implement keyword detail hooks in src/frontend/src/hooks/useKeywordDetail.ts with useKeyword(), useAccelerationHistory(), useStageTransitions()
+- [X] T125 [P] [US3] Add navigation from OpportunityCard to keyword detail page using Next.js Link component
 
 ### AI Insight Enhancements
 
-- [ ] T126 [US3] Enhance AI prompt template in OpenAIProvider to include lifecycle stage explanation, growth signal analysis (search acceleration %, video velocity, creator adoption), timing recommendation rationale, seasonality warnings, rapid transition alerts
-- [ ] T127 [P] [US3] Implement confidence scoring in insight generation - LOW: <14 days data, MEDIUM: 14-30 days, HIGH: 30+ days with all signals present
-- [ ] T128 [P] [US3] Implement insight caching with 24hr TTL in insights service to reduce OpenAI API costs (Principle IV)
+- [X] T126 [US3] Enhance AI prompt template in OpenAIProvider to include lifecycle stage explanation, growth signal analysis (search acceleration %, video velocity, creator adoption), timing recommendation rationale, seasonality warnings, rapid transition alerts
+- [X] T127 [P] [US3] Implement confidence scoring in insight generation - LOW: <14 days data, MEDIUM: 14-30 days, HIGH: 30+ days with all signals present
+- [X] T128 [P] [US3] Implement insight caching with 24hr TTL in insights service to reduce OpenAI API costs (Principle IV)
 
 ### Stage Transition Detection
 
-- [ ] T129 [US3] Implement detectRapidTransition() in stage-transition service - flag if stage jump occurs in <7 days (normal: 7-14 days, rapid: <7 days, stagnant: >30 days)
-- [ ] T130 [P] [US3] Implement getTriggerSignals() in stage-transition service - identify which acceleration metrics triggered the stage change
-- [ ] T131 [P] [US3] Add rapid transition alerts to AI insights - "⚠️ Rapid stage transition detected (emerging → viral in 4 days). Opportunity window may be closing faster than normal."
+- [X] T129 [US3] Implement detectRapidTransition() in stage-transition service - flag if stage jump occurs in <7 days (normal: 7-14 days, rapid: <7 days, stagnant: >30 days)
+- [X] T130 [P] [US3] Implement getTriggerSignals() in stage-transition service - identify which acceleration metrics triggered the stage change
+- [X] T131 [P] [US3] Add rapid transition alerts to AI insights - "⚠️ Rapid stage transition detected (emerging → viral in 4 days). Opportunity window may be closing faster than normal."
 
 ---
 
@@ -271,41 +271,41 @@
 
 ### Performance Optimization
 
-- [ ] T132 Implement caching for GET /dashboard/emerging-opportunities with 30min TTL (Principle IV)
-- [ ] T133 [P] Add database indexes for common queries: idx_keywords_lifecycle_stage, idx_keywords_user_normalized, idx_trend_data_keyword_time (Principle IV)
-- [ ] T134 [P] Optimize TimescaleDB continuous aggregates for daily acceleration metrics to reduce query time (Principle IV)
-- [ ] T135 [P] Implement pagination for GET /keywords endpoint (limit: 20, default page: 1) (Principle IV)
-- [ ] T136 [P] Add request timeout handling (5s default) with graceful degradation (Principle III)
+- [X] T132 Implement caching for GET /dashboard/emerging-opportunities with 30min TTL (Principle IV)
+- [X] T133 [P] Add database indexes for common queries: idx_keywords_lifecycle_stage, idx_keywords_user_normalized, idx_trend_data_keyword_time (Principle IV)
+- [X] T134 [P] Optimize TimescaleDB continuous aggregates for daily acceleration metrics to reduce query time (Principle IV)
+- [X] T135 [P] Implement pagination for GET /keywords endpoint (limit: 20, default page: 1) (Principle IV)
+- [X] T136 [P] Add request timeout handling (5s default) with graceful degradation (Principle III)
 
 ### Error Handling & User Experience
 
-- [ ] T137 Implement global error handler in src/backend/src/common/filters/http-exception.filter.ts with user-friendly messages (Principle III)
-- [ ] T138 [P] Add API rate limit exhaustion handling - return 429 with resetAt timestamp, frontend displays "Data collection paused due to API limits. Refreshes at {resetAt}" (Principle III)
-- [ ] T139 [P] Implement insufficient data handling - display "Insufficient historical data for high-confidence prediction. Check back in 7-14 days" for keywords with <7 days data (Principle III)
-- [ ] T140 [P] Add empty state for users with no keywords - display curated seed opportunities with "Add your first keyword to get personalized predictions" (Principle III)
+- [X] T137 Implement global error handler in src/backend/src/common/filters/http-exception.filter.ts with user-friendly messages (Principle III)
+- [X] T138 [P] Add API rate limit exhaustion handling - return 429 with resetAt timestamp, frontend displays "Data collection paused due to API limits. Refreshes at {resetAt}" (Principle III)
+- [X] T139 [P] Implement insufficient data handling - display "Insufficient historical data for high-confidence prediction. Check back in 7-14 days" for keywords with <7 days data (Principle III)
+- [X] T140 [P] Add empty state for users with no keywords - display curated seed opportunities with "Add your first keyword to get personalized predictions" (Principle III)
 
 ### Documentation
 
-- [ ] T141 Generate OpenAPI/Swagger documentation in src/backend/src/main.ts with SwaggerModule (Principle I)
-- [ ] T142 [P] Create API documentation in docs/api.md with endpoint descriptions, request/response examples, error codes
-- [ ] T143 [P] Create deployment guide in docs/deployment.md with Docker setup, environment variables, database migrations, TimescaleDB initialization
-- [ ] T144 [P] Update README.md with project overview, architecture diagram, quick start guide, testing instructions
+- [X] T141 Generate OpenAPI/Swagger documentation in src/backend/src/main.ts with SwaggerModule (Principle I)
+- [X] T142 [P] Create API documentation in docs/api.md with endpoint descriptions, request/response examples, error codes
+- [X] T143 [P] Create deployment guide in docs/deployment.md with Docker setup, environment variables, database migrations, TimescaleDB initialization
+- [X] T144 [P] Update README.md with project overview, architecture diagram, quick start guide, testing instructions
 
 ### Final Integration Tests
 
-- [ ] T145 E2E test for complete user flow in src/backend/test/e2e/complete-flow.test.ts: register → login → view dashboard → add keyword → view keyword detail → verify prediction score updates over simulated time
-- [ ] T146 [P] E2E test for seed keywords in src/backend/test/e2e/seed-keywords.test.ts: verify 20 seed keywords exist, have prediction scores, appear in dashboard for new users
+- [X] T145 E2E test for complete user flow in src/backend/test/e2e/complete-flow.test.ts: register → login → view dashboard → add keyword → view keyword detail → verify prediction score updates over simulated time
+- [X] T146 [P] E2E test for seed keywords in src/backend/test/e2e/seed-keywords.test.ts: verify 20 seed keywords exist, have prediction scores, appear in dashboard for new users
 - [ ] T147 [P] Load testing for dashboard endpoint with Artillery or k6 - verify <2s load time with 100 concurrent users (Principle IV)
 - [ ] T148 [P] Regression tests for lifecycle classification accuracy in src/backend/test/regression/classification-accuracy.test.ts - spot-check 100 keywords against manual expert classification (90% accuracy target)
 
 ### Deployment Preparation
 
-- [ ] T149 Create production Dockerfile for backend in infrastructure/Dockerfile.backend with multi-stage build
-- [ ] T150 [P] Create production Dockerfile for trend-collector in infrastructure/Dockerfile.collector
-- [ ] T151 [P] Create production Dockerfile for frontend in infrastructure/Dockerfile.frontend with Next.js standalone build
+- [X] T149 Create production Dockerfile for backend in infrastructure/Dockerfile.backend with multi-stage build
+- [X] T150 [P] Create production Dockerfile for trend-collector in infrastructure/Dockerfile.collector
+- [X] T151 [P] Create production Dockerfile for frontend in infrastructure/Dockerfile.frontend with Next.js standalone build
 - [ ] T152 [P] Update docker-compose.yml with production environment variables, health checks, resource limits
-- [ ] T153 [P] Create database backup script in infrastructure/scripts/backup-db.sh for PostgreSQL + TimescaleDB
-- [ ] T154 [P] Configure monitoring and logging with Winston in src/backend/src/common/logger/logger.service.ts (structured JSON logs for production)
+- [X] T153 [P] Create database backup script in infrastructure/scripts/backup-db.sh for PostgreSQL + TimescaleDB
+- [X] T154 [P] Configure monitoring and logging with Winston in src/backend/src/common/logger/logger.service.ts (structured JSON logs for production)
 
 ---
 

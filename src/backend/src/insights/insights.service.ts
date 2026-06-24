@@ -9,6 +9,7 @@ import { CacheService, CACHE_TTLS } from '../common/cache/cache.service';
 import { PredictionService } from '../prediction/prediction.service';
 import { Keyword } from '../keywords/entities/keyword.entity';
 import { AccelerationService } from '../acceleration/acceleration.service';
+import { StageTransitionService } from '../lifecycle/stage-transition.service';
 
 @Injectable()
 export class InsightsService {
@@ -25,6 +26,7 @@ export class InsightsService {
     private readonly cacheService: CacheService,
     private readonly predictionService: PredictionService,
     private readonly accelerationService: AccelerationService,
+    private readonly stageTransitionService: StageTransitionService,
   ) {}
 
   async generateInsight(keywordId: string): Promise<AIInsight> {
@@ -37,6 +39,12 @@ export class InsightsService {
     const score = await this.predictionService.getLatestScore(keywordId);
     const seasonalPattern = await this.seasonalityDetector.detectSeasonalPattern(keywordId);
 
+    const transitions = await this.stageTransitionService.getTransitionHistory(keywordId);
+    const latestTransition = transitions[0] ?? null;
+    const isRapid = latestTransition
+      ? this.stageTransitionService.detectRapidTransition(latestTransition.daysInPreviousStage)
+      : false;
+
     const insight = await this.generator.generateLifecycleInsight(this.openAIProvider, {
       keywordId,
       keyword: keyword.originalTerm,
@@ -48,7 +56,14 @@ export class InsightsService {
         creatorAdoptionRate: metrics?.creatorAdoptionRate ?? null,
         relatedQueryGrowth: metrics?.relatedQueryGrowth ?? null,
       },
-      rapidTransition: false,
+      rapidTransition: isRapid,
+      rapidTransitionDetails: isRapid && latestTransition
+        ? {
+            previousStage: latestTransition.previousStage,
+            newStage: latestTransition.newStage,
+            daysInPreviousStage: latestTransition.daysInPreviousStage,
+          }
+        : undefined,
       seasonalPattern,
       confidenceLevel: metrics?.confidenceLevel ?? 'low',
       historicalDataDays: metrics?.historicalDataDays ?? 0,

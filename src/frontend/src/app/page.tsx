@@ -109,9 +109,15 @@ export default function DashboardPage() {
           ) : error ? (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">{error}</div>
           ) : opportunities.length === 0 ? (
-            <div className="text-center py-16 text-gray-500">
-              <p className="mb-2">No emerging opportunities found.</p>
-              <p className="text-sm">Seed keywords are being monitored — check back in a few hours.</p>
+            <div className="text-center py-16">
+              <div className="text-4xl mb-4">🌱</div>
+              <p className="text-gray-700 font-medium mb-2">No opportunities match your current filters.</p>
+              <p className="text-sm text-gray-500 mb-4">
+                Try broadening your stage selection or lowering the minimum score.
+              </p>
+              <p className="text-xs text-gray-400">
+                Add your first keyword to get personalized predictions — or wait while seed keywords are being monitored.
+              </p>
             </div>
           ) : (
             <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>

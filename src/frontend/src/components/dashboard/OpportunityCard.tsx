@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import styles from './OpportunityCard.module.css';
 
 export interface Opportunity {
@@ -47,11 +48,14 @@ export function OpportunityCard({ opportunity: op, onClick }: Props) {
   const stageClass = STAGE_CLASS[op.lifecycleStage] ?? styles.stageSeed;
   const timingClass = op.timingRecommendation ? (TIMING_CLASS[op.timingRecommendation] ?? '') : '';
   const scoreChangePositive = (op.scoreChange ?? 0) > 0;
+  const isInsufficientData = op.confidenceLevel === 'low' && op.predictionScore === 0;
 
   return (
-    <div className={styles.card} onClick={() => onClick?.(op.keywordId)} role="article">
+    <div className={styles.card} role="article">
       <div className={styles.header}>
-        <h3 className={styles.keyword} title={op.keyword}>{op.keyword}</h3>
+        <Link href={`/keyword/${op.keywordId}`} className={styles.keyword} title={op.keyword} onClick={() => onClick?.(op.keywordId)}>
+          {op.keyword}
+        </Link>
         <div style={{ textAlign: 'right', flexShrink: 0 }}>
           <span className={styles.score}>{op.predictionScore}</span>
           <span className={styles.scoreLabel}>score</span>
@@ -92,7 +96,13 @@ export function OpportunityCard({ opportunity: op, onClick }: Props) {
         </div>
       </div>
 
-      {op.insightText && (
+      {isInsufficientData && (
+        <p className={styles.insufficientData}>
+          Insufficient historical data for high-confidence prediction. Check back in 7–14 days.
+        </p>
+      )}
+
+      {!isInsufficientData && op.insightText && (
         <p className={styles.insight}>{op.insightText}</p>
       )}
     </div>
